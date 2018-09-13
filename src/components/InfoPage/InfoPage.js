@@ -22,6 +22,8 @@ class InfoPage extends Component {
   
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+
+    this.getItems();
   }
 
   componentDidUpdate() {
@@ -48,6 +50,7 @@ class InfoPage extends Component {
     })
   }
 
+  //POST ROUTE to add items to shelf
   addItem = (event) => {
     console.log('in addItem', this.state.newItem);
     event.preventDefault();
@@ -57,8 +60,24 @@ class InfoPage extends Component {
       data: this.state.newItem
     }).then((reponse) => {
       //THIS IS WHERE THE GET FUNCTION WOULD BE CALLED
+      this.getItems;
     }).catch((error) => {
       console.log('error in addItem', error);
+    })
+  }
+
+  //GET ROUTE to get all items from database to display on shelf
+  getItems = () => {
+    console.log('in getItems');
+    Axios({
+      method: 'GET',
+      url: '/api/shelf'
+    }).then((response) => {
+      console.log('back from database:', response.data);
+      //add response.data to redux store so we can parse and display on dom
+    }).catch((error) => {
+      console.log('error getting items:', error);
+      alert('error getting items');
     })
   }
 
