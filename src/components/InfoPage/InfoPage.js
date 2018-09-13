@@ -16,7 +16,8 @@ class InfoPage extends Component {
       newItem: {
         description: '',
         image: ''
-      }
+      },
+      shelfItems: []
     }
   }
   
@@ -75,6 +76,9 @@ class InfoPage extends Component {
     }).then((response) => {
       console.log('back from database:', response.data);
       //add response.data to redux store so we can parse and display on dom
+      this.setState({
+        shelfItems: response.data
+      });
     }).catch((error) => {
       console.log('error getting items:', error);
       alert('error getting items');
@@ -100,7 +104,17 @@ class InfoPage extends Component {
               <button>Submit</button>
             </div>
           </form>
-
+          <div >
+            <ul>
+              {this.state.shelfItems.map((item, i) => {
+                return(
+                  <li key={i}>{item.description}
+                    <img src={item.image_url} alt={item.description}/>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       );
     }
