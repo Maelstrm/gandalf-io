@@ -3,14 +3,25 @@ import { connect } from 'react-redux';
 
 import Nav from '../../components/Nav/Nav';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import Axios from 'axios';
 
 const mapStateToProps = state => ({
   user: state.user,
 });
 
 class InfoPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      newItem: {
+        description: '',
+        image: ''
+      }
+    }
+  }
+  
   componentDidMount() {
-    this.props.dispatch({type: USER_ACTIONS.FETCH_USER});
+    this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
   }
 
   componentDidUpdate() {
@@ -19,15 +30,58 @@ class InfoPage extends Component {
     }
   }
 
+  handleChange = (event) => {
+    this.setState({
+      newItem: {
+        ...this.state.newItem,
+        description: event.target.value }
+    })
+  }
+
+  handleImageChange = (event) => {
+    this.setState({
+      
+      newItem: {
+        ...this.state.newItem,
+        image: event.target.value,
+      }
+    })
+  }
+
+  addItem = (event) => {
+    console.log('in addItem', this.state.newItem);
+    event.preventDefault();
+    Axios({
+      method: 'POST',
+      url: '/api/items',
+      data: this.state.newItem
+    }).then((reponse) => {
+      //THIS IS WHERE THE GET FUNCTION WOULD BE CALLED
+    }).catch((error) => {
+      console.log('error in addItem', error);
+    })
+  }
+
   render() {
     let content = null;
 
     if (this.props.user.userName) {
       content = (
         <div>
-          <p>
-            Info Page
-          </p>
+
+          <h1>Add shelf items:</h1>
+          <form onSubmit={this.addItem}>
+            <div className="inputDiv">
+              <input type="text" name="itemDescription" placeholder="description" onChange={this.handleChange} value={this.state.newItem.description} />
+            </div>
+            <div>
+              <input type="text" name="itemImage" placeholder="image" onChange={this.handleImageChange} value={this.state.newItem.image} />
+            </div>
+            <div className="buttonDiv">
+              <button>Submit</button>
+            </div>
+          </form>
+
         </div>
       );
     }
@@ -35,7 +89,7 @@ class InfoPage extends Component {
     return (
       <div>
         <Nav />
-        { content }
+        {content}
       </div>
     );
   }
