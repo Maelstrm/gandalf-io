@@ -19,6 +19,7 @@ class InfoPage extends Component {
       },
       shelfItems: []
     }
+    // data is from database is currently store in this state will be moved to redux state and reducers
   }
   
   componentDidMount() {
@@ -75,7 +76,8 @@ class InfoPage extends Component {
       url: '/api/shelf'
     }).then((response) => {
       console.log('back from database:', response.data);
-      //add response.data to redux store so we can parse and display on dom
+      //DO THIS LATER  add response.data to redux store so we can parse and display on dom
+      //currently adding response.data to local state
       this.setState({
         shelfItems: response.data
       });
@@ -106,6 +108,7 @@ class InfoPage extends Component {
           </form>
           <div >
             <ul>
+              {/* map items from database to li on dom */}
               {this.state.shelfItems.map((item, i) => {
                 return(
                   <li key={i}>{item.description}
