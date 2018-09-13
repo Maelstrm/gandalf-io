@@ -53,7 +53,7 @@ class InfoPage extends Component {
     event.preventDefault();
     Axios({
       method: 'POST',
-      url: '/api/items',
+      url: '/api/shelf',
       data: this.state.newItem
     }).then((reponse) => {
       //THIS IS WHERE THE GET FUNCTION WOULD BE CALLED
