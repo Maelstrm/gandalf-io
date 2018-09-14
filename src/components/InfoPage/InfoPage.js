@@ -16,12 +16,16 @@ class InfoPage extends Component {
       newItem: {
         description: '',
         image_url: ''
-      }
+      },
+      shelfItems: []
     }
+    // data is from database is currently store in this state will be moved to redux state and reducers
   }
   
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+
+    this.getItems();
   }
 
   componentDidUpdate() {
@@ -48,6 +52,7 @@ class InfoPage extends Component {
     })
   }
 
+  //POST ROUTE to add items to shelf
   addItem = (event) => {
     console.log('in addItem', this.state.newItem);
     event.preventDefault();
@@ -57,8 +62,28 @@ class InfoPage extends Component {
       data: this.state.newItem
     }).then((reponse) => {
       //THIS IS WHERE THE GET FUNCTION WOULD BE CALLED
+      this.getItems();
     }).catch((error) => {
       console.log('error in addItem', error);
+    })
+  }
+
+  //GET ROUTE to get all items from database to display on shelf
+  getItems = () => {
+    console.log('in getItems');
+    Axios({
+      method: 'GET',
+      url: '/api/shelf'
+    }).then((response) => {
+      console.log('back from database:', response.data);
+      //DO THIS LATER  add response.data to redux store so we can parse and display on dom
+      //currently adding response.data to local state
+      this.setState({
+        shelfItems: response.data
+      });
+    }).catch((error) => {
+      console.log('error getting items:', error);
+      alert('error getting items');
     })
   }
 
@@ -81,7 +106,18 @@ class InfoPage extends Component {
               <button>Submit</button>
             </div>
           </form>
-
+          <div >
+            <ul>
+              {/* map items from database to li on dom */}
+              {this.state.shelfItems.map((item, i) => {
+                return(
+                  <li key={i}>{item.description}
+                    <img src={item.image_url} alt={item.description}/>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       );
     }

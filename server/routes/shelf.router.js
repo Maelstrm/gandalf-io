@@ -8,7 +8,9 @@ const router = express.Router();
 //route to get all items from item table
 router.get('/', (req, res) => {
     //make sure user is logged in to view shelf
-    if (req.isAuthenticated()) {
+    if(req.isAuthenticated()) {
+        // "item".* gets all from item table   
+        // and the query only grabs username from person table
         const getAll = `SELECT "item".*,  "person"."username" 
                    FROM "item" JOIN "person" 
                    ON "person"."id" = "item"."person_id";`;
