@@ -97,7 +97,22 @@ router.put('/:id', (req, res) => {
  * they have added to the shelf
  */
 router.get('/count', (req, res) => {
-
+    if (req.isAuthenticated()) {
+        const getCount = `SELECT COUNT("item"."id"), "person"."username" FROM "item"
+                        JOIN "person"
+                        ON "item"."person_id" = "person"."id"
+                        GROUP BY "person"."username";`;
+        pool.query(getCount).then((results) => {
+            console.log('get count working', results.rows);
+            res.send(results.rows);
+        }).catch((error) => {
+            console.log('error getting item count', error);
+            res.sendStatus(500);
+        });
+    }
+    else {
+        res.sendStatus(403);
+    }
 });
 
 
