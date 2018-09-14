@@ -87,6 +87,20 @@ class InfoPage extends Component {
     })
   }
 
+  deleteItem = (event) => {
+    console.log('in deleteItem');
+    const itemId = event.target.value;
+    Axios({
+      method: 'DELETE',
+      url: '/api/shelf/' + itemId,
+    }).then((response) => {
+      this.getItems();
+    }).catch((error) => {
+      console.log('error making delete', error);
+      alert('ERROR caught making delete request');
+    })
+  }
+
   render() {
     let content = null;
 
@@ -113,6 +127,7 @@ class InfoPage extends Component {
                 return(
                   <li key={i}>{item.description}
                     <img src={item.image_url} alt={item.description}/>
+                    <button onClick={this.deleteItem} value={item.id}>Delete</button>
                   </li>
                 );
               })}
