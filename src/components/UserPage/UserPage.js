@@ -66,7 +66,7 @@ constructor(props) {
 
           <div>
             {this.state.itemCount.map((item, i) => {
-              return (<div>{item.count}, {item.username}</div>)
+              return (<div key={i}>{item.count}, {item.username}</div>)
             })}
           </div>
 
