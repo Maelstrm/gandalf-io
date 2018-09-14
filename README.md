@@ -1,3 +1,8 @@
+This is an app to hold "items" on a "shelf". Each item has a description and an image.
+The image is sourced from a url stored in the database.
+
+
+
 # REACT AUTH SHELF
 
 Our client, Prime Digital Academy: Room 2, has asked for an app to simulate the behavior of their shelf. That is, a list of items placed on the classroom shelf. More details about each of the features are listed below in the README.md.
