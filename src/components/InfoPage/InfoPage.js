@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Nav from '../../components/Nav/Nav';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import Axios from 'axios';
+import DisplayItem from '../DisplayItem/DisplayItem';
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -17,11 +18,11 @@ class InfoPage extends Component {
         description: '',
         image_url: ''
       },
-      shelfItems: []
+      shelfItems: [],
     }
     // data is from database is currently store in this state will be moved to redux state and reducers
   }
-  
+
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
 
@@ -38,13 +39,14 @@ class InfoPage extends Component {
     this.setState({
       newItem: {
         ...this.state.newItem,
-        description: event.target.value }
+        description: event.target.value
+      }
     })
   }
 
   handleImageChange = (event) => {
     this.setState({
-      
+
       newItem: {
         ...this.state.newItem,
         image_url: event.target.value,
@@ -101,6 +103,8 @@ class InfoPage extends Component {
     })
   }
 
+ 
+
   render() {
     let content = null;
 
@@ -121,18 +125,14 @@ class InfoPage extends Component {
             </div>
           </form>
           <div >
-            <ul>
-              {/* map items from database to li on dom */}
-              {this.state.shelfItems.map((item, i) => {
-                return(
-                  <li key={i}>{item.description}
-                    <img src={item.image_url} alt={item.description}/>
-                    <button onClick={this.deleteItem} value={item.id}>Delete</button>
-                  </li>
-                );
-              })}
-            </ul>
+            {/* map items from database to li on dom */}
+            {this.state.shelfItems.map((item, i) => {
+              return (
+                <DisplayItem key={i} itemData={item} />
+              );
+            })}
           </div>
+          
         </div>
       );
     }
