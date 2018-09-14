@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
         pool.query(getAll).then((results) => {
             res.send(results.rows);
         }).catch((error) => {
-            console.log('error getting all items from item table', error);
+            console.log('error in GET route', error);
             res.sendStatus(500);
         });
     }
@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
             .then((results) => {
                 res.send(results.rows);
             }).catch((error) => {
-                console.log('error unable to post', error);
+                console.log('error in POST route', error);
                 res.sendStatus(500);
             })
     } else {
@@ -61,7 +61,7 @@ router.delete('/:id', (req, res) => {
         .then((results) => {
             res.sendStatus(200);
         }).catch((error) => {
-            console.log('error making delete',error);
+            console.log('error in DELETE route',error);
             res.sendStatus(500);
         })
     } else {
@@ -74,7 +74,21 @@ router.delete('/:id', (req, res) => {
  * Update an item if it's something the logged in user added
  */
 router.put('/:id', (req, res) => {
-
+    if(req.isAuthenticated()) {
+        const idToEdit = req.params.id;
+        const editBody = req.body;
+        console.log('editing:', idToEdit, editBody);
+        const editQuery = `UPDATE "item" SET "description" = $1 WHERE id = $2;`;
+        pool.query(editQuery, [idToEdit, editBody.description])
+        .then((results) => {
+            res.sendStatus(200);
+        }).catch((error) => {
+            console.log('error in PUT route', error);
+            res.sendStatus(500);
+        })
+    } else {
+        res.sendStatus(403);
+    }
 });
 
 
