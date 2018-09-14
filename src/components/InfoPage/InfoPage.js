@@ -15,7 +15,7 @@ class InfoPage extends Component {
     this.state = {
       newItem: {
         description: '',
-        image: ''
+        image_url: ''
       },
       shelfItems: []
     }
@@ -47,7 +47,7 @@ class InfoPage extends Component {
       
       newItem: {
         ...this.state.newItem,
-        image: event.target.value,
+        image_url: event.target.value,
       }
     })
   }
@@ -62,7 +62,7 @@ class InfoPage extends Component {
       data: this.state.newItem
     }).then((reponse) => {
       //THIS IS WHERE THE GET FUNCTION WOULD BE CALLED
-      this.getItems;
+      this.getItems();
     }).catch((error) => {
       console.log('error in addItem', error);
     })
@@ -100,7 +100,7 @@ class InfoPage extends Component {
               <input type="text" name="itemDescription" placeholder="description" onChange={this.handleChange} value={this.state.newItem.description} />
             </div>
             <div>
-              <input type="text" name="itemImage" placeholder="image" onChange={this.handleImageChange} value={this.state.newItem.image} />
+              <input type="text" name="itemImage" placeholder="image" onChange={this.handleImageChange} value={this.state.newItem.image_url} />
             </div>
             <div className="buttonDiv">
               <button>Submit</button>
