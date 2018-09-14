@@ -8,18 +8,18 @@ const router = express.Router();
 //route to get all items from item table
 router.get('/', (req, res) => {
     //make sure user is logged in to view shelf
-    if(req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
         const getAll = `SELECT "item".*,  "person"."username" 
                    FROM "item" JOIN "person" 
                    ON "person"."id" = "item"."person_id";`;
         pool.query(getAll).then((results) => {
             res.send(results.rows);
-        }).catch((error) =>  {
+        }).catch((error) => {
             console.log('error getting all items from item table', error);
             res.sendStatus(500);
         });
     }
-    else{
+    else {
         res.sendStatus(403);
     }
 });
@@ -29,7 +29,21 @@ router.get('/', (req, res) => {
  * Add an item for the logged in user to the shelf
  */
 router.post('/', (req, res) => {
-
+    if (req.isAuthenticated()) {
+        const shelfItem = req.body;
+        console.log('item to add',shelfItem);
+        const query = `INSERT INTO "item" ("person_id", "description","image_url") 
+                       VALUES ($1,$2, $3);`;
+        pool.query(query, [req.user.id, shelfItem.description, shelfItem.image_url])
+            .then((results) => {
+                res.send(results.rows);
+            }).catch((error) => {
+                console.log('error unable to post', error);
+                res.sendStatus(500);
+            })
+    } else {
+        res.sendStatus(403);
+    }
 });
 
 
